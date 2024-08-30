@@ -275,3 +275,158 @@ function arraysEqual(arrA, arrB) {
 function objectsEqual(objA, objB) {
   return (JSON.stringify(objA) === JSON.stringify(objB))
 }
+
+// Custom each method
+function myEach(collection, callback) {
+  if (Array.isArray(collection)) {
+      for (let i = 0; i < collection.length; i++) {
+          callback(collection[i], i, collection);
+      }
+  } else {
+      for (let key in collection) {
+          if (collection.hasOwnProperty(key)) {
+              callback(collection[key], key, collection);
+          }
+      }
+  }
+  return collection;
+}
+
+// Custom map method
+function myMap(collection, callback) {
+  const result = Array.isArray(collection) ? [] : {};
+  myEach(collection, (value, key) => {
+      result[key] = callback(value, key, collection);
+  });
+  return result;
+}
+
+// Custom reduce method
+function myReduce(collection, callback, initialValue) {
+  let accumulator = initialValue !== undefined ? initialValue : collection[0];
+  const startIndex = initialValue !== undefined ? 0 : 1;
+
+  for (let i = startIndex; i < collection.length; i++) {
+      accumulator = callback(accumulator, collection[i], i, collection);
+  }
+
+  return accumulator;
+}
+
+// Custom find method
+function myFind(collection, predicate) {
+  for (let i = 0; i < collection.length; i++) {
+      if (predicate(collection[i], i, collection)) {
+          return collection[i];
+      }
+  }
+  return undefined;
+}
+
+// Custom filter method
+function myFilter(collection, predicate) {
+  const result = [];
+  myEach(collection, (value, key) => {
+      if (predicate(value, key, collection)) {
+          result.push(value);
+      }
+  });
+  return result;
+}
+
+// Custom size method
+function mySize(collection) {
+  return Array.isArray(collection) ? collection.length : Object.keys(collection).length;
+}
+
+// Custom first method
+function myFirst(collection, n) {
+  if (n === undefined) {
+      return collection[0];
+  }
+  return collection.slice(0, n);
+}
+
+// Custom last method
+function myLast(collection, n) {
+  if (n === undefined) {
+      return collection[collection.length - 1];
+  }
+  return collection.slice(-n);
+}
+
+// Custom keys method
+function myKeys(object) {
+  return Object.keys(object);
+}
+
+// Custom values method
+function myValues(object) {
+  return Object.values(object);
+}
+
+// Custom each method
+function myEach(collection, callback) {
+  if (Array.isArray(collection)) {
+      for (let i = 0; i < collection.length; i++) {
+          callback(collection[i], i, collection);
+      }
+  } else {
+      for (let key in collection) {
+          if (collection.hasOwnProperty(key)) {
+              callback(collection[key], key, collection);
+          }
+      }
+  }
+  return collection;
+}
+
+// Custom map method
+function myMap(collection, callback) {
+  const result = [];
+  myEach(collection, (value, key) => {
+      result.push(callback(value, key, collection));
+  });
+  return result;
+}
+
+// Example usage
+const obj = { a: 1, b: 2, c: 3 };
+const modifiedArray = myMap(obj, (value) => value * 2); // [2, 4, 6]
+console.log(modifiedArray); // Output: [2, 4, 6]
+
+// Custom each method
+function myEach(collection, callback) {
+  if (Array.isArray(collection)) {
+      for (let i = 0; i < collection.length; i++) {
+          callback(collection[i], i, collection);
+      }
+  } else {
+      for (let key in collection) {
+          if (collection.hasOwnProperty(key)) {
+              callback(collection[key], key, collection);
+          }
+      }
+  }
+  return collection;
+}
+
+// Custom reduce method
+function myReduce(collection, callback, initialValue) {
+  let accumulator = initialValue !== undefined ? initialValue : Array.isArray(collection) ? collection[0] : Object.values(collection)[0];
+  const startIndex = initialValue !== undefined ? 0 : Array.isArray(collection) ? 1 : 1;
+
+  if (Array.isArray(collection)) {
+      for (let i = startIndex; i < collection.length; i++) {
+          accumulator = callback(accumulator, collection[i], i, collection);
+      }
+  } else {
+      const values = Object.values(collection);
+      for (let i = startIndex; i < values.length; i++) {
+          accumulator = callback(accumulator, values[i], i, values);
+      }
+  }
+
+  return accumulator;
+}
+
